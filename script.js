@@ -13,18 +13,27 @@ document.addEventListener('DOMContentLoaded', () => {
     btnCopiarEl.style.display = "inline-block";
   };
 
+  const soloMinusculas = (texto) => {
+    return texto.toLowerCase() === texto;
+  };
+
   const cifrar = (resultado) => {
+    if (!soloMinusculas(resultado)) {
+      alert('Por favor, ingrese solo texto en minúsculas.');
+      return '';
+    }
+
     let cifrado = '';
 
     for (let i = 0; i < resultado.length; i++) {
-      const char = resultado[i].toLowerCase();
+      const char = resultado[i];
       const indice = alfabeto.indexOf(char);
 
       if (indice !== -1) {
         const charCifrado = clave[indice];
-        cifrado += resultado[i] === resultado[i].toUpperCase() ? charCifrado.toUpperCase() : charCifrado;
+        cifrado += charCifrado;
       } else {
-        cifrado += resultado[i];
+        cifrado += char;
       }
     }
 
@@ -32,17 +41,22 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const descifrar = (resultado) => {
+    if (!soloMinusculas(resultado)) {
+      alert('Por favor, ingrese solo texto en minúsculas.');
+      return '';
+    }
+
     let descifrado = '';
 
     for (let i = 0; i < resultado.length; i++) {
-      const char = resultado[i].toLowerCase();
+      const char = resultado[i];
       const indice = clave.indexOf(char);
 
       if (indice !== -1) {
         const charOriginal = alfabeto[indice];
-        descifrado += resultado[i] === resultado[i].toUpperCase() ? charOriginal.toUpperCase() : charOriginal;
+        descifrado += charOriginal;
       } else {
-        descifrado += resultado[i];
+        descifrado += char;
       }
     }
 
@@ -56,8 +70,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnEncriptarEl.addEventListener('click', () => {
     const texto = caja.value;
-    remplazar(cifrar(texto));
-    caja.value = ''; // reiniciar área de texto
+    const resultadoCifrado = cifrar(texto);
+
+    if (resultadoCifrado !== '') {
+      remplazar(resultadoCifrado);
+      caja.value = ''; 
+    }
   });
 
   btnDesencriptarEl.addEventListener('click', desencriptarYMostrar);
@@ -71,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.execCommand('copy');
     document.body.removeChild(textarea);
 
-    // reiniciar proceso o reemplazar valores
     caja.value = '';
     textoEncriptado.innerHTML = '';
     btnCopiarEl.style.display = 'none';
