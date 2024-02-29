@@ -5,8 +5,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnDesencriptarEl = document.getElementById('desencriptar');
   const btnCopiarEl = document.getElementById('copiarResultado');
 
-  const alfabeto = 'abcdefghijklmnopqrstuvwxyz'; // alfabeto original
-  const clave = 'defghijklmnopqrstuvwxyzabc'; // algoritmo de sustitución
+  const codigo = [
+    ["e", "enter"],
+    ["o", "ober"],
+    ["i", "imes"],
+    ["a", "ai"],
+    ["u", "ufat"],
+  ];
 
   const remplazar = (all) => {
     textoEncriptado.innerHTML = all;
@@ -17,67 +22,45 @@ document.addEventListener('DOMContentLoaded', () => {
     return texto.toLowerCase() === texto;
   };
 
-  const cifrar = (resultado) => {
+  const aplicarCodigo = (resultado, operacion) => {
     if (!soloMinusculas(resultado)) {
       alert('Por favor, ingrese solo texto en minúsculas.');
       return '';
     }
 
-    let cifrado = '';
+    let resultadoTransformado = resultado;
 
-    for (let i = 0; i < resultado.length; i++) {
-      const char = resultado[i];
-      const indice = alfabeto.indexOf(char);
-
-      if (indice !== -1) {
-        const charCifrado = clave[indice];
-        cifrado += charCifrado;
-      } else {
-        cifrado += char;
-      }
+    for (let i = 0; i < codigo.length; i++) {
+      const charOriginal = codigo[i][operacion === "cifrar" ? 0 : 1];
+      const charReemplazo = codigo[i][operacion === "cifrar" ? 1 : 0];
+      const regex = new RegExp(charOriginal, 'g');
+      resultadoTransformado = resultadoTransformado.replace(regex, charReemplazo);
     }
 
-    return cifrado;
+    return resultadoTransformado;
   };
 
-  const descifrar = (resultado) => {
-    if (!soloMinusculas(resultado)) {
-      alert('Por favor, ingrese solo texto en minúsculas.');
-      return '';
+  const encriptarYMostrar = () => {
+    const texto = caja.value;
+    const resultadoCifrado = aplicarCodigo(texto, "cifrar");
+
+    if (resultadoCifrado !== '') {
+      remplazar(resultadoCifrado);
+      caja.value = '';
     }
-
-    let descifrado = '';
-
-    for (let i = 0; i < resultado.length; i++) {
-      const char = resultado[i];
-      const indice = clave.indexOf(char);
-
-      if (indice !== -1) {
-        const charOriginal = alfabeto[indice];
-        descifrado += charOriginal;
-      } else {
-        descifrado += char;
-      }
-    }
-
-    return descifrado;
   };
 
   const desencriptarYMostrar = () => {
     const texto = caja.value;
-    remplazar(descifrar(texto));
+    const resultadoDescifrado = aplicarCodigo(texto, "descifrar");
+
+    if (resultadoDescifrado !== '') {
+      remplazar(resultadoDescifrado);
+      caja.value = '';
+    }
   };
 
-  btnEncriptarEl.addEventListener('click', () => {
-    const texto = caja.value;
-    const resultadoCifrado = cifrar(texto);
-
-    if (resultadoCifrado !== '') {
-      remplazar(resultadoCifrado);
-      caja.value = ''; 
-    }
-  });
-
+  btnEncriptarEl.addEventListener('click', encriptarYMostrar);
   btnDesencriptarEl.addEventListener('click', desencriptarYMostrar);
 
   btnCopiarEl.addEventListener('click', () => {
