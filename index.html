@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CryptoText Hub</title>
-  <link rel="icon" href="imagenes/icono_cth.png" type="image/png" sizes="32x32">
-  <link rel="apple-touch-icon" href="imagenes/icono_cth.png" sizes="180x180">
+  <link rel="icon" href="imágenes/icono cth.png" type="image/png" sizes="180x180">
+  <link rel="apple-touch-icon" href="imágenes/icono cth.png" sizes="180x180">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -14,16 +14,16 @@
   </header>
   <main>
     <div class="container">
-      <p>Introduce un mensaje para encriptarlo o desencriptarlo, en minúsculas:</p>
-      <textarea id="caja" class="input-text"></textarea>
+      <p class="texto-grande">Introduce un mensaje para encriptarlo o desencriptarlo, en minúsculas y sin acentuación:</p>
+      <textarea id="caja" class="input-text texto-grande"></textarea>
       <div class="botones">
-        <button id="encriptar" class="btn btn-encriptar">Encriptar</button>
-        <button id="desencriptar" class="btn btn-desencriptar">Desencriptar</button>
+        <button id="encriptar" class="btn btn-encriptar" onclick="validarTexto(true)">Encriptar</button>
+        <button id="desencriptar" class="btn btn-desencriptar" onclick="validarTexto(false)">Desencriptar</button>
       </div>
-      <p>Mensaje encriptado/desencriptado:</p>
+      <p class="texto-grande">Mensaje encriptado/desencriptado:</p>
       <div class="resultado-container">
         <p id="textoencriptado" class="resultado"></p>
-        <button id="copiarResultado" class="btn btn-copiar">Copiar</button>
+        <button id="copiarResultado" class="btn btn-copiar" onclick="botonCopiar()">Copiar</button>
       </div>
     </div>
   </main>

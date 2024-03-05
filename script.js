@@ -1,82 +1,92 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const caja = document.getElementById("caja");
-  const textoEncriptado = document.getElementById("textoencriptado");
-  const btnEncriptarEl = document.getElementById('encriptar');
-  const btnDesencriptarEl = document.getElementById('desencriptar');
-  const btnCopiarEl = document.getElementById('copiarResultado');
+var caja = document.getElementById("caja");
 
-  const codigo = [
-    ["e", "enter"],
-    ["o", "ober"],
-    ["i", "imes"],
-    ["a", "ai"],
-    ["u", "ufat"],
-  ];
-
-  const remplazar = (all) => {
-    textoEncriptado.innerHTML = all;
-    btnCopiarEl.style.display = "inline-block";
-  };
-
-  const soloMinusculas = (texto) => {
-    return texto.toLowerCase() === texto;
-  };
-
-  const aplicarCodigo = (resultado, operacion) => {
-    if (!soloMinusculas(resultado)) {
-      alert('Por favor, ingrese solo texto en minúsculas.');
-      return '';
+// Función principal que valida y decide cifrar o descifrar
+function validarTexto(cifrar) {
+    var textoOriginal = caja.value;
+    var regex = /[A-ZÁÉÍÓÚÜáéíóúüý!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]/gm;
+    if (textoOriginal === "") { 
+        alert("No hay texto, por favor, escribe para encriptar o desencriptar.");
+        porDefecto();
+    } else if (regex.test(textoOriginal)) {
+        alert("El texto no puede contener mayúsculas ni acentuaciones.");
+        caja.value = "";
+        porDefecto();
+    } else {
+        if (cifrar) {
+            cifrarTexto(); 
+        } else {
+            descifrarTexto(); 
+        }
     }
+}
 
-    let resultadoTransformado = resultado;
+// Función para cifrar el texto
+function cifrarTexto() {
+    var textoOriginal = caja.value.toLowerCase();
+    var textoCifrado = textoOriginal.replace(/[aeiou]/mg, function(leer){
+        const lectura ={
+            'a':'ai',
+            'e':'enter',
+            'i':'imes',
+            'o':'ober',
+            'u':'ufat'
+        };
+        return lectura[leer];
+    });
+    document.getElementById("textoencriptado").textContent = textoCifrado;
+    caja.value = "";
+    mostrarResultado();
+}
 
-    for (let i = 0; i < codigo.length; i++) {
-      const charOriginal = codigo[i][operacion === "cifrar" ? 0 : 1];
-      const charReemplazo = codigo[i][operacion === "cifrar" ? 1 : 0];
-      const regex = new RegExp(charOriginal, 'g');
-      resultadoTransformado = resultadoTransformado.replace(regex, charReemplazo);
-    }
+// Función para mostrar el resultado
+function mostrarResultado(){
+    document.getElementById("defecto").style.display="none";
+    document.getElementById("persona").style.display ="none";
+    document.getElementById("textoencriptado").style.display ="block";
+    document.getElementById("copiarResultado").style.display ="block";
+}
 
-    return resultadoTransformado;
-  };
+// Función para restablecer a la configuración por defecto
+function porDefecto(){
+    document.getElementById("defecto").style.display="block";
+    document.getElementById("persona").style.display ="block";
+    document.getElementById("textoencriptado").style.display ="none";
+    document.getElementById("copiarResultado").style.display ="none";
+    let button = document.getElementById("copiarResultado");
+    button.textContent = "Copiar";
+}
 
-  const encriptarYMostrar = () => {
-    const texto = caja.value;
-    const resultadoCifrado = aplicarCodigo(texto, "cifrar");
+// Función para descifrar el texto
+function descifrarTexto() {
+    var textoCifrado = caja.value.toLowerCase();
+    var textoDescifrado = textoCifrado.replace(/(ai|enter|imes|ober|ufat)/mg, function(leer) {
+        const lectura = {
+            'ai': 'a',
+            'enter': 'e',
+            'imes': 'i',
+            'ober': 'o',
+            'ufat': 'u'
+        };
+        return lectura[leer];
+    });
+    document.getElementById("textoencriptado").textContent = textoDescifrado;
+    caja.value = "";
+    mostrarResultado(); 
+}
 
-    if (resultadoCifrado !== '') {
-      remplazar(resultadoCifrado);
-      caja.value = '';
-    }
-  };
+// Función para copiar el texto al portapapeles
+function botonCopiar(){
+    let text = document.getElementById("textoencriptado");
+    let button = document.getElementById("copiarResultado");
 
-  const desencriptarYMostrar = () => {
-    const texto = caja.value;
-    const resultadoDescifrado = aplicarCodigo(texto, "descifrar");
-
-    if (resultadoDescifrado !== '') {
-      remplazar(resultadoDescifrado);
-      caja.value = '';
-    }
-  };
-
-  btnEncriptarEl.addEventListener('click', encriptarYMostrar);
-  btnDesencriptarEl.addEventListener('click', desencriptarYMostrar);
-
-  btnCopiarEl.addEventListener('click', () => {
-    const resultadoTexto = textoEncriptado.textContent;
-    const textarea = document.createElement('textarea');
-    textarea.value = resultadoTexto;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-
-    caja.value = '';
-    textoEncriptado.innerHTML = '';
-    btnCopiarEl.style.display = 'none';
-    caja.focus();
-  });
-
-  textoEncriptado.addEventListener('click', desencriptarYMostrar);
-});
+    navigator.clipboard.writeText(text.textContent)
+        .then(function() {
+            button.textContent = "Copiar";
+            // Restablecer el juego después de copiar
+            text.textContent = "";
+            porDefecto();
+        })
+        .catch(function(err) {
+            console.error('Error al copiar el texto: ', err);
+        });
+}

@@ -1,7 +1,7 @@
 header {
   background-color: #003d99;
   color: #fff;
-  padding: 20px 0;
+  padding: 10px 0;
   text-align: center;
 }
 
@@ -24,6 +24,11 @@ main {
   margin: 0 auto;
 }
 
+.texto-grande{
+  font-family: sans-serif;
+  font-size: 18px;
+}
+
 p {
   margin-bottom: 10px;
 }
@@ -34,7 +39,7 @@ p {
   border-radius: 5px;
   width: 400px;
   height: 120px;
-  font-size: 16px;
+  font-size: 18px;
   resize: vertical;
   box-sizing: border-box; 
 }
@@ -48,7 +53,7 @@ p {
   border: 1px solid #ccc;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   margin-right: 10px;
 }
 
@@ -78,7 +83,7 @@ p {
   border-radius: 5px;
   width: 380px;
   height: 120px;
-  font-size: 16px;
+  font-size: 18px;
   margin: 20px auto;
   text-align: left;
   overflow: auto;
@@ -87,10 +92,11 @@ p {
 
 .btn-copiar {
   background-color: #5cad44;
+  color: #fff;
 }
 
 footer {
-  background-color: #BBBBBB;
+  background-color: #D6D9DB;
   padding: 2px;
   text-align: center;
   margin-top: auto;
@@ -111,18 +117,22 @@ footer ul li a img {
   border: none;
 }
 
-@media only screen and (max-width: 400px) {
+@media screen and (max-width: 480px) {
   .input-text {
-    width: 100%;
+    width: 300px;
+    height: 120px;
   }
 
+.resultado{
+  width: 300px;
+  height: 120px;
+}
   .btn {
     margin-right: 0;
     margin-bottom: 10px;
   }
 
   footer ul li {
-    display: block;
-    margin: 10px 0;
+    margin: 2px 2px;
   }
 }
